@@ -14,14 +14,18 @@ func main() {
 	// Uncomment this block to pass the first stage
 	fmt.Fprint(os.Stdout, "$ ")
 
-	// Wait for user input
-	userInput, err := bufio.NewReader(os.Stdin).ReadString('\n')
-	if err != nil {
-		fmt.Printf("failed to read user input due to error %s", err)
-		return
+	for {
+		// Wait for user input
+		userInput, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		if err != nil {
+			fmt.Printf("failed to read user input due to error %s", err)
+			return
+		}
+
+		userInput = strings.TrimRight(userInput, "\n")
+		fmt.Printf("%v: command not found\n", userInput)
+
 	}
-
-	userInput= strings.TrimRight(userInput, "\n")
-
-	fmt.Printf("%v: command not found", userInput)
+	// a better approach here would be
+	// fmt.Printf("%s: command not found\n", strings.TrimSpace(userInput))
 }
