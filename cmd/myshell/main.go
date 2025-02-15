@@ -24,6 +24,7 @@ func main() {
 
 		userInput = strings.TrimRight(userInput, "\n")
 		fmt.Printf("%v: command not found\n", userInput)
+		fmt.Fprint(os.Stdout, "$ ")
 
 	}
 	// a better approach here would be
