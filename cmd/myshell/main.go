@@ -22,13 +22,15 @@ func main() {
 			return
 		}
 
+		userInput= strings.TrimSpace(userInput)
+
 		if userInput == "exit 0" {
-			return
+			break
 		} else if strings.HasPrefix(userInput, "echo") {
 			tmp := userInput[4:]
 			fmt.Println(strings.TrimSpace(tmp))
 		} else {
-			fmt.Printf("%s: command not found\n", strings.TrimSpace(userInput))
+			fmt.Printf("%s: command not found\n", userInput)
 		}
 
 		fmt.Fprint(os.Stdout, "$ ")
