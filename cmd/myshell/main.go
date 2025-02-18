@@ -22,13 +22,20 @@ func main() {
 			return
 		}
 
-		userInput= strings.TrimSpace(userInput)
+		userInput = strings.TrimSpace(userInput)
 
 		if userInput == "exit 0" {
 			break
 		} else if strings.HasPrefix(userInput, "echo") {
 			tmp := userInput[4:]
 			fmt.Println(strings.TrimSpace(tmp))
+		} else if strings.HasPrefix(userInput, "type") {
+			tmp := strings.TrimSpace(userInput[4:])
+			if tmp == "echo" || tmp == "exit" {
+				fmt.Printf("%s is a shell builtin", tmp)
+			} else {
+				fmt.Printf("%s: not found", tmp)
+			}
 		} else {
 			fmt.Printf("%s: command not found\n", userInput)
 		}
