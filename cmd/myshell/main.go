@@ -31,7 +31,7 @@ func main() {
 			fmt.Println(strings.TrimSpace(tmp))
 		} else if strings.HasPrefix(userInput, "type") {
 			tmp := strings.TrimSpace(userInput[4:])
-			if tmp == "echo" || tmp == "exit" {
+			if tmp == "echo" || tmp == "exit" || tmp=="type" {
 				fmt.Printf("%s is a shell builtin\n", tmp)
 			} else {
 				fmt.Printf("%s: not found\n", tmp)
