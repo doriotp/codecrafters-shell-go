@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -31,11 +32,7 @@ func main() {
 			fmt.Println(strings.TrimSpace(tmp))
 		} else if strings.HasPrefix(userInput, "type") {
 			tmp := strings.TrimSpace(userInput[4:])
-			if tmp == "echo" || tmp == "exit" || tmp=="type" {
-				fmt.Printf("%s is a shell builtin\n", tmp)
-			} else {
-				fmt.Printf("%s: not found\n", tmp)
-			}
+			handleTypeCommand(tmp)
 		} else {
 			fmt.Printf("%s: command not found\n", userInput)
 		}
@@ -45,4 +42,22 @@ func main() {
 	}
 	// a better approach here would be
 	// fmt.Printf("%s: command not found\n", strings.TrimSpace(userInput))
+}
+
+func checkIfExecInPath(e string) (string, error) {
+	path, err := exec.LookPath(e)
+	return path, err
+}
+
+func handleTypeCommand(tmp string) {
+	if tmp == "echo" || tmp == "exit" || tmp == "type" {
+		fmt.Printf("%s is a shell builtin\n", tmp)
+	} else {
+		path, err := checkIfExecInPath(tmp)
+		if err != nil {
+			fmt.Printf("%s: not found\n", tmp)
+		} else {
+			fmt.Printf("%s is %s\n", tmp, path)
+		}
+	}
 }
