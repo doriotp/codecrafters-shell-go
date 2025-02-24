@@ -31,6 +31,14 @@ func main() {
 		} else if strings.HasPrefix(userInput, "type") {
 			tmp := strings.TrimSpace(userInput[4:])
 			handleTypeCommand(tmp)
+		} else if cmds[0]=="pwd"{
+			mydir, err := os.Getwd() 
+			if err!=nil{
+				fmt.Println(err)
+				return 
+			}
+
+			fmt.Println(mydir)
 		} else {
 			command := exec.Command(cmds[0], cmds[1:]...)
 			command.Stdout = os.Stdout
@@ -52,7 +60,7 @@ func checkIfExecInPath(e string) (string, error) {
 }
 
 func handleTypeCommand(tmp string) {
-	if tmp == "echo" || tmp == "exit" || tmp == "type" {
+	if tmp == "echo" || tmp == "exit" || tmp == "type" || tmp=="pwd" {
 		fmt.Printf("%s is a shell builtin\n", tmp)
 	} else {
 		path, err := checkIfExecInPath(tmp)
