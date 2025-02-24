@@ -12,21 +12,19 @@ import (
 var _ = fmt.Fprint
 
 func main() {
-	// Uncomment this block to pass the first stage
-	fmt.Fprint(os.Stdout, "$ ")
-
 	for {
+		fmt.Fprint(os.Stdout, "$ ")
 		// Wait for user input
 		userInput, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		userInput = strings.TrimSpace(userInput)
+		cmds := strings.Split(userInput, " ")
 		if err != nil {
 			fmt.Printf("failed to read user input due to error %s", err)
 			return
 		}
 
-		userInput = strings.TrimSpace(userInput)
-
 		if userInput == "exit 0" {
-			break
+			os.Exit(0)
 		} else if strings.HasPrefix(userInput, "echo") {
 			tmp := userInput[4:]
 			fmt.Println(strings.TrimSpace(tmp))
@@ -34,10 +32,14 @@ func main() {
 			tmp := strings.TrimSpace(userInput[4:])
 			handleTypeCommand(tmp)
 		} else {
-			fmt.Printf("%s: command not found\n", userInput)
+			command := exec.Command(cmds[0], cmds[1:]...)
+			command.Stdout = os.Stdout
+			command.Stderr = os.Stderr
+			err := command.Run()
+			if err != nil {
+				fmt.Printf("%s: command not found\n", cmds[0])
+			}
 		}
-
-		fmt.Fprint(os.Stdout, "$ ")
 
 	}
 	// a better approach here would be
