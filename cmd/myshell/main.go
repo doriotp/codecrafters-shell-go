@@ -31,17 +31,30 @@ func main() {
 		} else if strings.HasPrefix(userInput, "type") {
 			tmp := strings.TrimSpace(userInput[4:])
 			handleTypeCommand(tmp)
-		} else if cmds[0]=="pwd"{
-			mydir, err := os.Getwd() 
-			if err!=nil{
+		} else if cmds[0] == "pwd" {
+			mydir, err := os.Getwd()
+			if err != nil {
 				fmt.Println(err)
 			}
 
 			fmt.Println(mydir)
-		} else if cmds[0]=="cd"{
-			err := os.Chdir(cmds[1])
-			if err!=nil{
-				fmt.Printf("cd: %s: No such file or directory\n", cmds[1])
+		} else if cmds[0] == "cd" {
+			if cmds[1] == "~" {
+				home, err := os.UserHomeDir()
+				if err != nil {
+					fmt.Println(err)
+				}
+
+				err = os.Chdir(home)
+				if err != nil {
+					fmt.Printf("cd: %s: No such file or directory\n", cmds[1])
+				}
+
+			} else {
+				err := os.Chdir(cmds[1])
+				if err != nil {
+					fmt.Printf("cd: %s: No such file or directory\n", cmds[1])
+				}
 			}
 		} else {
 			command := exec.Command(cmds[0], cmds[1:]...)
@@ -64,7 +77,7 @@ func checkIfExecInPath(e string) (string, error) {
 }
 
 func handleTypeCommand(tmp string) {
-	if tmp == "echo" || tmp == "exit" || tmp == "type" || tmp=="pwd" {
+	if tmp == "echo" || tmp == "exit" || tmp == "type" || tmp == "pwd" {
 		fmt.Printf("%s is a shell builtin\n", tmp)
 	} else {
 		path, err := checkIfExecInPath(tmp)
