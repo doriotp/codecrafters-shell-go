@@ -39,22 +39,19 @@ func main() {
 
 			fmt.Println(mydir)
 		} else if cmds[0] == "cd" {
+			targetDirectory := cmds[1]
 			if cmds[1] == "~" {
 				home, err := os.UserHomeDir()
 				if err != nil {
 					fmt.Println(err)
 				}
 
-				err = os.Chdir(home)
-				if err != nil {
-					fmt.Printf("cd: %s: No such file or directory\n", cmds[1])
-				}
+				targetDirectory = home
 
-			} else {
-				err := os.Chdir(cmds[1])
-				if err != nil {
-					fmt.Printf("cd: %s: No such file or directory\n", cmds[1])
-				}
+			}
+			err := os.Chdir(targetDirectory)
+			if err != nil {
+				fmt.Printf("cd: %s: No such file or directory\n", cmds[1])
 			}
 		} else {
 			command := exec.Command(cmds[0], cmds[1:]...)
